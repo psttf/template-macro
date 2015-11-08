@@ -17,7 +17,7 @@ class templateMacro(val c: Context) extends MacroApplication {
 
   // TODO: absract over function global vals usage
   def apply(annottees: Expr[Any]*): Expr[Any] = {
-    val tree: Tree = MacroApp(c.macroApplication).termArgs.head.head
+    val tree = MacroApp(c.macroApplication).termArgs.head.head
     val expr = c.Expr[Any](c.typecheck(tree))
     val unapplyArgType = expr.actualType.typeArgs.last
     val q"(..${fargs: List[ValDef]}) => ${fbody: Tree}" = tree
