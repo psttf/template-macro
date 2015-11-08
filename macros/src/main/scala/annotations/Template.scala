@@ -31,8 +31,8 @@ class templateMacro(val c: Context) extends MacroApplication {
         case Apply(fun, args) => Apply(fun, recursiveMatch(args))
         case arg => {
           fargsMap.get(arg.toString()).fold(arg){ fa =>
-            mutableBuffer += q"${fa}"
-            pq"${fa} @ ${Ident(termNames.WILDCARD)}" }
+            mutableBuffer += q"$fa"
+            pq"$fa @ ${Ident(termNames.WILDCARD)}" }
         }
       }
     }
