@@ -29,8 +29,8 @@ class templateMacro(val c: Context) extends MacroApplication {
     def recursiveMatch(subtree: List[Tree]): List[Tree] = {
       subtree.map {
         case Apply(fun, args) => Apply(fun, recursiveMatch(args))
-        case args => {
-          fargsMap.get(args.toString()).fold(args){ fa =>
+        case arg => {
+          fargsMap.get(arg.toString()).fold(arg){ fa =>
             mutableBuffer += q"${fa}"
             pq"${fa} @ ${Ident(termNames.WILDCARD)}" }
         }
