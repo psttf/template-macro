@@ -20,7 +20,7 @@ class templateMacro(val c: Context) extends MacroApplication {
     val tree: Tree = MacroApp(c.macroApplication).termArgs.head.head
     val expr = c.Expr[Any](c.typecheck(tree))
     val unapplyType = expr.actualType.typeArgs.last
-    val (fargs, fbody) = anonymousFunction(tree)
+    val q"(..${fargs: List[ValDef]}) => ${fbody: Tree}" = tree
     val fargsMap = fargs.map { case v => v.name.toString -> v.name }.toMap
 
     // TODO: avoid mutable collection usage
@@ -54,9 +54,5 @@ class templateMacro(val c: Context) extends MacroApplication {
         """
       }
     }
-  }
-
-  def anonymousFunction(t: Tree): (List[ValDef], Tree) = t match {
-    case Function(params, body) => (params, body)
   }
 }
