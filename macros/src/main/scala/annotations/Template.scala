@@ -19,7 +19,7 @@ class templateMacro(val c: Context) extends MacroApplication {
   def apply(annottees: Expr[Any]*): Expr[Any] = {
     val tree: Tree = MacroApp(c.macroApplication).termArgs.head.head
     val expr = c.Expr[Any](c.typecheck(tree))
-    val unapplyType = expr.actualType.typeArgs.last
+    val unapplyArgType = expr.actualType.typeArgs.last
     val q"(..${fargs: List[ValDef]}) => ${fbody: Tree}" = tree
     val fargsMap = fargs.map { case v => v.name.toString -> v.name }.toMap
 
@@ -45,7 +45,7 @@ class templateMacro(val c: Context) extends MacroApplication {
           q"""
           object $name extends ..$parents {
             def apply = $tree
-            def unapply(a: $unapplyType) = a match {
+            def unapply(a: $unapplyArgType) = a match {
               case $result => Some((..$mutableBuffer))
               case _ => None
             }
