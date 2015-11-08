@@ -6,7 +6,7 @@ import scala.language.experimental.macros
 import scala.annotation.StaticAnnotation
 import scala.collection.mutable.ListBuffer
 
-final class template[F, T](t: F => T) extends StaticAnnotation {
+final class template(fun: Any) extends StaticAnnotation {
   def macroTransform(annottees: Any*): Any = macro templateMacro.apply
 }
 
@@ -19,6 +19,7 @@ class templateMacro(val c: Context) extends MacroApplication {
   def apply(annottees: Expr[Any]*): Expr[Any] = {
     val tree: Tree = MacroApp(c.macroApplication).termArgs.head.head
     val expr = c.Expr[Any](c.typecheck(tree))
+    val unapplyType = expr.actualType.typeArgs.last
     val (fargs, fbody) = anonymousFunction(tree)
     val fargsMap = fargs.map { case v => v.name.toString -> v.name }.toMap
 
@@ -43,9 +44,9 @@ class templateMacro(val c: Context) extends MacroApplication {
         case q"object $name extends ..$parents { ..$body }" :: Nil =>
           q"""
           object $name extends ..$parents {
-            def apply = ${tree}
-            def unapply(a: ${expr.actualType.typeArgs.last}) = a match {
-              case ${result} => Some((..${mutableBuffer}))
+            def apply = $tree
+            def unapply(a: $unapplyType) = a match {
+              case $result => Some((..$mutableBuffer))
               case _ => None
             }
             ..$body
@@ -55,7 +56,7 @@ class templateMacro(val c: Context) extends MacroApplication {
     }
   }
 
-  def anonymousFunction(t: Tree): (List[c.universe.ValDef], c.universe.Tree) = t match {
+  def anonymousFunction(t: Tree): (List[ValDef], Tree) = t match {
     case Function(params, body) => (params, body)
   }
 }
