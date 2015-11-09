@@ -2,7 +2,7 @@ val paradiseVersion = "2.1.0-M5"
 
 val buildSettings = Defaults.defaultSettings ++ Seq(
   organization := "com.dc",
-  version := "1.0.0",
+  version := "0.0.1",
   scalacOptions ++= Seq(),
   scalaVersion := "2.11.7",
   crossScalaVersions := Seq("2.10.2", "2.10.3", "2.10.4", "2.10.5", "2.10.6", "2.11.0", "2.11.1", "2.11.2", "2.11.3", "2.11.4", "2.11.5", "2.11.6", "2.11.7"),
@@ -11,18 +11,28 @@ val buildSettings = Defaults.defaultSettings ++ Seq(
   addCompilerPlugin("org.scalamacros" % "paradise" % paradiseVersion cross CrossVersion.full)
 )
 
+val publishSettings = BintrayPlugin.bintrayPublishSettings ++ Seq(
+  description := "Scala macro to generate apply and unapply functions for an object.",
+  homepage := Some(url("https://github.com/pomadchin/template-macro")),
+  licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0.html")),
+  publishMavenStyle := true,
+  bintrayRepository := "maven",
+  bintrayOrganization := None
+)
+
 lazy val root = Project(
   "root",
   file("."),
   settings = buildSettings ++ Seq(
-    run <<= run in Compile in core
+    run <<= run in Compile in example
   )
-) aggregate(macros, core)
+) aggregate(macros, example)
 
 lazy val macros = Project(
   "macros",
   file("macros"),
-  settings = buildSettings ++ Seq(
+  settings = buildSettings ++ publishSettings ++ Seq(
+    name := "template-macros",
     libraryDependencies <+= (scalaVersion)("org.scala-lang" % "scala-reflect" % _),
     libraryDependencies ++= (
       if (scalaVersion.value.startsWith("2.10")) List("org.scalamacros" %% "quasiquotes" % paradiseVersion)
@@ -31,8 +41,8 @@ lazy val macros = Project(
   )
 )
 
-lazy val core = Project(
-  "core",
-  file("core"),
+lazy val example = Project(
+  "example",
+  file("example"),
   settings = buildSettings
 ) dependsOn(macros)

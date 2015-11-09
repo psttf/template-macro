@@ -19,10 +19,21 @@ object Test extends App {
 }
 ```
 
-## Idea
+## Install
 
-* The idea belongs to [Pavel Shapkin](https://github.com/psttf)
+```scala
+scalaVersion := "2.11.7"
+
+libraryDependencies ++= Seq(
+  "com.dc" %% "template-macros" % "0.0.1"
+)
+
+resolvers ++= Seq(
+  "DaunnC bintray repo" at "http://dl.bintray.com/daunnc/maven/"
+)
+```
 
 ## License
 
-TOFILL...
+* The idea belongs to [Pavel Shapkin](https://github.com/psttf)
+* Licensed under the Apache License, Version 2.0: [http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)
