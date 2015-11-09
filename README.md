@@ -1,6 +1,6 @@
 ## Template macro
 
-The motivation is to avoid `case class` extention necessity. As the result it is possible to use macro, to generate `apply` and `unapply` function for an `object`. 
+The motivation is to avoid `case class` inheritance necessity. As the result it is possible to use macro, to generate `apply` and `unapply` function for an `object`. 
 
 ## Usage example
 
