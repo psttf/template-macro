@@ -34,7 +34,7 @@ addCompilerPlugin(
  "org.scalamacros" % "paradise" % "2.1.0-M5" cross CrossVersion.full
 )
 
-libraryDependencies += "com.dc" %% "template-macros" % "0.0.1"
+libraryDependencies += "com.dc" %% "template-macros" % "0.0.2"
 ```
 
 ## License
