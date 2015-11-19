@@ -34,7 +34,7 @@ class TemplateSpec extends Specification {
     }
 
     // https://github.com/pomadchin/template-macro/issues/5
-    "several time usage of a function argument in its body" in {
+    "process several time usage of a function argument in its body" in {
       @template(
         (i: Int) => Twice(i, i)
       ) object TwiceTest
