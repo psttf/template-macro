@@ -10,8 +10,8 @@ case class PD(sw: SW, iw: IW, bw: BW)
 object Test extends App {
   def typeToString[T](o: T)(implicit t: TypeTag[T]) = t.tpe.toString
 
-  val appl   = apply(2, "sss", 2d)
-  val unappl = unapply(PD(SW("s"), IW(1100), BW(28d)))
+  lazy val appl   = apply(2, "sss", 2d)
+  lazy val unappl = unapply(PD(SW("s"), IW(1100), BW(28d)))
 
   println(s"apply: ${appl}: ${typeToString(appl)}")
   println(s"unapply: ${unappl}: ${typeToString(unappl)}")
