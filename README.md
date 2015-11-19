@@ -9,10 +9,10 @@ import annotations.template
 
 case class SW(s: String)
 case class IW(c: Int)
-case class BW(d: Double)
-case class PD(sw: SW, iw: IW, bw: BW)
+case class DW(d: Double)
+case class PD(sw: SW, iw: IW, bw: DW)
 
-@template((i: Int, s: String, d: Double) => PD(SW(s), IW(i), BW(d)))
+@template((i: Int, s: String, d: Double) => PD(SW(s), IW(i), DW(d)))
 object Test {
   println(apply(2, "sss", 2d))
   println(unapply(PD(SW("s"), IW(1100), BW(28d))))
