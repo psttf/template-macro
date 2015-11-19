@@ -15,7 +15,7 @@ case class PD(sw: SW, iw: IW, bw: DW)
 @template((i: Int, s: String, d: Double) => PD(SW(s), IW(i), DW(d)))
 object Test {
   println(apply(2, "sss", 2d))
-  println(unapply(PD(SW("s"), IW(1100), BW(28d))))
+  println(unapply(PD(SW("s"), IW(1100), DW(28d))))
 }
 ```
 
