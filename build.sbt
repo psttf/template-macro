@@ -33,7 +33,9 @@ lazy val macros = Project(
   file("macros"),
   settings = buildSettings ++ publishSettings ++ Seq(
     name := "template-macros",
+    scalacOptions in Test += "-Yrangepos",
     libraryDependencies <+= (scalaVersion)("org.scala-lang" % "scala-reflect" % _),
+    libraryDependencies += "org.specs2" %% "specs2-core" % "3.6.5" % "test",
     libraryDependencies ++= (
       if (scalaVersion.value.startsWith("2.10")) List("org.scalamacros" %% "quasiquotes" % paradiseVersion)
       else Nil
