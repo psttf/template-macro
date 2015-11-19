@@ -1,4 +1,5 @@
 ## Template macro
+[![Build Status](https://secure.travis-ci.org/pomadchin/template-macro.png)](https://travis-ci.org/pomadchin/template-macro/)
 
 The motivation is to avoid `case class` inheritance necessity. As the result it is possible to use macro, to generate `apply` and `unapply` function for an `object`. 
 
