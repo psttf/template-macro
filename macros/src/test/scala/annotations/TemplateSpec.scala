@@ -11,6 +11,8 @@ case class InnerInner(i: Int)
 case class Inner(i: Int, inner: InnerInner)
 case class Outer(i: Int, inner: Inner)
 
+case class Twice(first: Int, second: Int)
+
 class TemplateSpec extends Specification {
 
   "Template" should {
@@ -29,6 +31,16 @@ class TemplateSpec extends Specification {
 
       OrderTest apply(1, "s", 2d) mustEqual PD(SW("s"), IW(1), DW(2d))
       OrderTest unapply PD(SW("s"), IW(1), DW(2d)) mustEqual Some(1, "s", 2d)
+    }
+
+    // https://github.com/pomadchin/template-macro/issues/5
+    "several time usage of a function argument in its body" in {
+      @template(
+        (i: Int) => Twice(i, i)
+      ) object TwiceTest
+
+      TwiceTest apply(1) mustEqual Twice(1, 1)
+      TwiceTest unapply Twice(1, 1) mustEqual Some(1)
     }
   }
 
