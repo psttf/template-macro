@@ -21,23 +21,24 @@ class templateMacro(val c: Context) extends MacroApplication {
     val expr = c.Expr[Any](c.typecheck(tree))
     val unapplyArgType = expr.actualType.typeArgs.last
     val q"(..${fargs: List[ValDef]}) => ${fbody: Tree}" = tree
-    val fargsMap = fargs.map { case v => v.name.toString -> v.name }.toMap
+    val fargsMap = fargs.zipWithIndex.map { case (v, i) => v.name.toString -> (i, v.name) }.toMap
 
     // TODO: avoid mutable collection usage
-    val mutableBuffer = ListBuffer[Tree]()
+    val indexedMutableBuffer = ListBuffer[(Int, Tree)]()
 
     def recursiveMatch(subtree: List[Tree]): List[Tree] = {
       subtree.map {
         case Apply(fun, args) => Apply(fun, recursiveMatch(args))
         case arg => {
-          fargsMap.get(arg.toString()).fold(arg){ fa =>
-            mutableBuffer += q"$fa"
+          fargsMap.get(arg.toString()).fold(arg){ case (index, fa) =>
+            indexedMutableBuffer += index -> q"$fa"
             pq"$fa @ ${Ident(termNames.WILDCARD)}" }
         }
       }
     }
 
     val result = recursiveMatch(List(fbody)).head
+    val buffer = indexedMutableBuffer.sortBy(_._1).map(_._2)
 
     c.Expr[Any] {
       annottees.map(_.tree).toList match {
@@ -46,7 +47,7 @@ class templateMacro(val c: Context) extends MacroApplication {
           object $name extends ..$parents {
             def apply = $tree
             def unapply(a: $unapplyArgType) = a match {
-              case $result => Some((..$mutableBuffer))
+              case $result => Some((..$buffer))
               case _ => None
             }
             ..$body
