@@ -4,7 +4,7 @@ import utils.MacroApplication
 import scala.reflect.macros.whitebox.Context
 import scala.language.experimental.macros
 import scala.annotation.StaticAnnotation
-import scala.collection.mutable.{Map => MMap, ListBuffer}
+import scala.collection.mutable.{Map => MMap}
 
 final class template(fun: Any) extends StaticAnnotation {
   def macroTransform(annottees: Any*): Any = macro templateMacro.apply
