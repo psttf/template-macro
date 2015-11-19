@@ -25,11 +25,16 @@ class TemplateSpec extends Specification {
       Flatten unapply Outer(1, Inner(2, InnerInner(3))) mustEqual Some(1, 2, 3)
     }
 
-    "reuse pattern variables" in {
-      @template((i: Int) => Twice(i, i)) object SameTwice
-      SameTwice apply 1 mustEqual Twice(1, 1)
-      SameTwice unapply Twice(1, 1) mustEqual Some(1)
-      SameTwice unapply Twice(1, 2) mustEqual None
+    "process several time usage of a function argument in its body" in {
+
+      @template(
+        (i: Int) => Twice(i, i)
+      ) object TwiceTest
+
+      TwiceTest apply 1 mustEqual Twice(1, 1)
+      TwiceTest unapply Twice(1, 1) mustEqual Some(1)
+      TwiceTest unapply Twice(1, 2) mustEqual None
+      
 	  }
 
     "have same ordered tuple in unapply result as the apply function arguments" in {
@@ -43,18 +48,6 @@ class TemplateSpec extends Specification {
 
     }
 
-    "process several time usage of a function argument in its body" in {
-
-      @template(
-        (i: Int) => Twice(i, i)
-      ) object TwiceTest
-
-      TwiceTest apply 1 mustEqual Twice(1, 1)
-      TwiceTest unapply Twice(1, 1) mustEqual Some(1)
-      TwiceTest unapply Twice(1, 2) mustEqual None
-
-    }
-    
   }
 
 }
