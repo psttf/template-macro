@@ -14,6 +14,13 @@ case class Outer(i: Int, inner: Inner)
 class TemplateSpec extends Specification {
 
   "Template" should {
+    "process flat patterns preserving order" in {
+      @template((i: Int, s: String, d: Double) => PD(SW(s), IW(i), DW(d)))
+      object DirectPD
+      DirectPD.apply(1,"abc", 1.2) mustEqual PD(SW("abc"), IW(1), DW(1.2))
+      DirectPD unapply PD(SW("abc"), IW(1), DW(1.2)) mustEqual
+        Some(1,"abc", 1.2)
+    }
     "process nested patterns" in {
       @template(
         (i1: Int, i2: Int, i3: Int) => Outer(i1, Inner(i2, InnerInner(i3)))
