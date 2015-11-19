@@ -24,13 +24,16 @@ object Test extends App {
 ```scala
 scalaVersion := "2.11.7"
 
-libraryDependencies ++= Seq(
-  "com.dc" %% "template-macros" % "0.0.1"
-)
-
 resolvers ++= Seq(
+  Resolver.sonatypeRepo("releases"),
   "DaunnC bintray repo" at "http://dl.bintray.com/daunnc/maven/"
 )
+
+addCompilerPlugin(
+ "org.scalamacros" % "paradise" % "2.1.0-M5" cross CrossVersion.full
+)
+
+libraryDependencies += "com.dc" %% "template-macros" % "0.0.1"
 ```
 
 ## License
